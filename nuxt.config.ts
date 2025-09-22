@@ -12,7 +12,16 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   css: ["~/assets/css/main.css"],
-  modules: ["@nuxt/fonts", "nuxt-security", "nuxt-gtag", "@nuxt/icon"],
+  modules: ['@pinia/nuxt', "@nuxt/fonts", "nuxt-security", "nuxt-gtag", "@nuxt/icon"],
+  security: {
+    headers: {
+      contentSecurityPolicy: {
+          "default-src": ["'self'"],
+          "img-src": ["'self'", "data:", "blob:", "https://openweathermap.org"],
+          "connect-src": ["'self'", "https://api.openweathermap.org"],
+      }
+    }
+  },
   app: {
     head: {
       title: "Weather App",
@@ -22,8 +31,7 @@ export default defineNuxtConfig({
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         {
           name: "description",
-          content:
-            "A simple weather app built with Nuxt 4 and OpenWeather API.",
+          content: "Aplicación de clima con pronóstico de 5 días",
         },
       ],
     },

@@ -1,3 +1,5 @@
+import tailwindcss from "@tailwindcss/vite";
+
 export default defineNuxtConfig({
   runtimeConfig: {
     private: {
@@ -6,6 +8,9 @@ export default defineNuxtConfig({
   },
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
+  vite: {
+    plugins: [tailwindcss()],
+  },
   css: ["~/assets/css/main.css"],
   modules: ["@nuxt/fonts", "nuxt-security", "nuxt-gtag", "@nuxt/icon"],
   app: {

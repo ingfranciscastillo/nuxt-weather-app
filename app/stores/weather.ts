@@ -33,7 +33,7 @@ export const useWeatherStore = defineStore("weather", {
   actions: {
     async fetchWeather(city: string) {
       const config = useRuntimeConfig();
-      const apiKey = config.public.openWeatherApiKey;
+      const apiKey = config.private.openWeatherApiKey;
 
       this.loading = true;
       this.error = null;

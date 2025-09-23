@@ -2,7 +2,9 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
   runtimeConfig: {
-    openWeatherApiKey: process.env.NUXT_OPEN_WEATHER_API_KEY,
+    private: {
+      openWeatherApiKey: process.env.NUXT_OPEN_WEATHER_API_KEY,
+    }
   },
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
@@ -10,7 +12,13 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   css: ["~/assets/css/main.css"],
-  modules: ['@pinia/nuxt', "@nuxt/fonts", "nuxt-security", "nuxt-gtag", "@nuxt/icon"],
+  modules: [
+    '@pinia/nuxt',
+    "@nuxt/fonts",
+    "nuxt-security",
+    "nuxt-gtag",
+    "@nuxt/icon",
+  ],
   security: {
     headers: {
       contentSecurityPolicy: {

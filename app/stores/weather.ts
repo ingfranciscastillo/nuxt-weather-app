@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import axios from "axios";
 
 export interface WeatherData {
   name: string;
@@ -32,19 +31,17 @@ export const useWeatherStore = defineStore("weather", {
 
   actions: {
     async fetchWeather(city: string) {
-      const config = useRuntimeConfig();
-      const apiKey = config.openWeatherApiKey;
-
       this.loading = true;
       this.error = null;
 
       try {
         // Fetch current weather
-        const currentResponse = await axios.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=es`
-        );
+        const data = await $fetch<any>("/api/weather", {
+          query: {
+            city
+          }
+        })
 
-        const data = currentResponse.data;
         this.currentWeather = {
           name: data.name,
           country: data.sys.country,
@@ -56,13 +53,13 @@ export const useWeatherStore = defineStore("weather", {
           main: data.weather[0].main,
         };
 
-        // Fetch forecast
-        const forecastResponse = await axios.get(
-          `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric&lang=es`
-        );
+        // Fetch forecast (desde API interna usando clave privada)
+        const forecastResponse: any = await $fetch("/api/forecast", {
+          query: { city }
+        })
 
         // Process forecast data - get one per day at noon
-        const forecastData = forecastResponse.data.list;
+        const forecastData = forecastResponse.list;
         const dailyForecast: ForecastDay[] = [];
 
         for (let i = 0; i < forecastData.length; i += 8) {
@@ -92,8 +89,9 @@ export const useWeatherStore = defineStore("weather", {
           localStorage.setItem("lastSearchedCity", city);
         }
       } catch (error: any) {
+        const status = error?.statusCode ?? error?.response?.status
         this.error =
-          error.response?.status === 404
+          status === 404
             ? "Ciudad no encontrada. Por favor, verifica el nombre e intenta nuevamente."
             : "Error al obtener los datos del clima. Intenta nuevamente.";
         this.currentWeather = null;

@@ -4,7 +4,7 @@
     <header class="p-4">
       <div class="max-w-4xl mx-auto flex justify-between items-center">
         <h1 class="text-2xl font-bold text-white">Weather App</h1>
-        <button
+          <button
           @click="toggleDarkMode"
           class="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors duration-200"
         >
@@ -88,21 +88,56 @@ const toggleDarkMode = () => {
 }
 
 onMounted(() => {
-  // Initialize dark mode
   const savedDarkMode = localStorage.getItem('darkMode')
   if (savedDarkMode === 'true' || (!savedDarkMode && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     isDark.value = true
     document.documentElement.classList.add('dark')
   }
 
-  // Load last searched city
   weatherStore.loadLastSearchedCity()
 })
 
 useHead({
   title: 'Weather App - Pronóstico del Clima',
+  htmlAttrs: {
+    lang: "es"
+  },
   meta: [
     { name: 'description', content: 'Aplicación de clima con pronóstico de 5 días' }
-  ]
+  ],
+  link: [
+    {
+      rel: "icon",
+      type: "image/svg+xml",
+      href: "/favicon.svg"
+    }
+  ],
 })
+
+const url = useRequestURL()
+useSeoMeta({
+  ogTitle: 'Weather App - Pronóstico del Clima',
+  ogDescription: 'Aplicación de clima con pronóstico de 5 días',
+  ogImage: new URL('/favicon.svg', url.origin).toString(),
+  ogUrl: url.href,
+  twitterTitle: 'Weather App - Pronóstico del Clima',
+  twitterDescription: 'Aplicación de clima con pronóstico de 5 días',
+  twitterImage: new URL('/favicon.svg', url.origin).toString(),
+  twitterCard: 'summary'
+})
+
 </script>
+
+<style>
+
+body {
+  background: #fff;
+  color: rgba(0, 0, 0, .8);
+}
+
+.dark-mode body {
+  background-color: #091a28;
+  color: #ebf4f1;
+}
+
+</style>
